@@ -343,36 +343,6 @@ def admin_add_route(request):
         return JsonResponse({"result": "ERROR"})
 
 
-@csrf_exempt
-def ping(request):
-    username = request.user.username if request.user.is_authenticated else "anonymous"
-
-    client = InfluxDBClient("ec2-18-233-170-234.compute-1.amazonaws.com", 8086, "***", "***", "hits")
-    client.write_points(
-        [{"measurement": "visit", "tags": {"page": request.POST["page"]}, "fields": {"user": username}}])
-    return HttpResponse()
-
-
-def visits_by_page(request):
-    if not request.user.is_staff:
-        return HttpResponse(status=403)
-
-    client = InfluxDBClient("ec2-18-233-170-234.compute-1.amazonaws.com", 8086, "***", "***", "hits")
-    hits = client.query(
-        f"SELECT count(*) as visits FROM \"hits\"..\"visit\" WHERE time > now() - {request.GET['period']} GROUP BY page")
-
-    return JsonResponse([(k[1]["page"], next(v)["visits_user"]) for k, v in hits.items()], safe=False)
-
-
-def visits_by_time_period(request):
-    if not request.user.is_staff:
-        return HttpResponse(status=403)
-
-    client = InfluxDBClient("ec2-18-233-170-234.compute-1.amazonaws.com", 8086, "***", "***", "hits")
-    hits = client.query(
-        f"SELECT count(*) as visits FROM \"hits\"..\"visit\" WHERE time > now() - {request.GET['limit']} GROUP BY time({request.GET['period']})")
-
-    return JsonResponse(list(hits.get_points()), safe=False)
 
 
 def bargraph_stats(request):

@@ -56,13 +56,6 @@ urlpatterns = [
     path('publish_my_position', api_views.show_my_position, name="show_my_position"),
     path('add_new_route', api_views.admin_add_route, name="api_admin_add_route"),
 
-    path('ping', api_views.ping, name="ping"),
-    path('stats/visits-by-page', api_views.visits_by_page, name="stats_visits_by_page"),
-    path('stats/visits-by-time-period', api_views.visits_by_time_period, name="stats_visits_by_time_period"),
-    path('stats/bargraph', api_views.bargraph_stats, name="stats_bargraph"),
-    path('reports/visits-by-page', views.visits_by_page, name="reports_visits_by_page"),
-    path('reports/visits-by-time-period', views.visits_by_time_period, name="reports_visits_by_time_period"),
-
     path('groups/<int:pk>', views.GroupDetailView.as_view(), name="group_detail"),
     path('groups/create', views.GroupCreateView.as_view(), name="group_create"),
     path('groups/<int:pk>/edit', views.GroupUpdateView.as_view(), name="edit_group"),
