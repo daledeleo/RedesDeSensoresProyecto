@@ -1,0 +1,294 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>NexusMap</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
+
+  <!--link para estilos-->
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}" media="screen">
+
+  <!-- animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+</head>
+
+<body id="page-top" class="sidebar-toggled">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <li>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="far fa-map"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">NexusMap</div>
+        </a>
+      </li>
+
+      <!-- Divider -->
+      <li>
+        <hr class="sidebar-divider my-0">
+      </li>
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'index' %}">
+          <i class="fas fa-fw fa-home"></i>
+          <span>Inicio</span></a>
+      </li>
+
+      <!-- Divider -->
+      <li>
+        <hr class="sidebar-divider">
+      </li>
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'view_events' %}">
+          <i class="fas fa-fw fa-calendar-alt"></i>
+          <span>Eventos</span></a>
+      </li>
+
+      <!-- Divider -->
+      <li>
+        <hr class="sidebar-divider">
+      </li>
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'contacts' %}">
+          <i class="fa fa-list-ul"></i>
+          <span>Contactos</span></a>
+      </li>
+
+      <!-- Divider -->
+      <li>
+        <hr class="sidebar-divider ">
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'quehacemos' %}">
+          <i class="fa fa-question"></i>
+          <span>Qué hacemos</span></a>
+      </li>
+
+      <!-- Divider -->
+      <li>
+        <hr class="sidebar-divider my-0">
+      </li>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            {% if user.is_staff %}
+            <li class="nav-item" id="admin-button">
+              <a class="nav-link" href="{% url 'admin_home' %}">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Administrador</span>
+                <i class="fas fa-cog"></i>
+              </a>
+            </li>
+            {% endif %}
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="{% if user.is_authenticated %}#{% else %}{% url 'login' %}{% endif %}" {% if user.is_authenticated %}data-toggle="dropdown"{% endif %} id="userDropdown" role="button">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{% if user.is_authenticated %}{{ user.email }}{% else %}Iniciar sesión{% endif %}</span>
+                <i class="fas fa-user-circle"></i>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="{% url 'user_profile' %}">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Perfil
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Cerrar sesión
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Grupo: {{ group.name }}</h1>
+
+
+
+
+          <!-- Contacts generales -->
+          <div id="cuerpo-login" class="row">
+
+            <div class="col">
+                <!-- Basic Card Example -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Datos del grupo</h6>
+                </div>
+                <!-- Cuerpo-->
+                <div class="card-body">
+                  <form action="/action_page.php">
+                    <div class="form-group">
+                      <label for="nombre">Nombre:</label>
+                      <input class="form-control" type="text" id="nombre" name="name" value="{{ group.name }}"readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="n_usuario">Fecha de creación:</label>
+                      <input class="form-control" type="date" id="creation_date" name="creation_date" value="{{ group.creation_date|date:"Y-m-d" }}"readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="correo">Integrantes</label>
+                      <input class="form-control" type="text" id="num_members" name="num_members" value="{{ group.members.all|length }}"readonly>
+                    </div>
+                  </form>
+                </div>
+                <!-- Cuerpo-->
+
+
+              </div>
+            <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">E-mail</th>
+                      <th scope="col">¿Es administrador?</th>
+                      <th scope="col">Fecha de unión</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for membership in group.memberships.all %}
+                    <tr>
+                      <th scope="row">{{ membership.user.name }}</th>
+                      <td>{{ membership.user.email }}</td>
+                      <td>{% if membership.is_group_manager %}
+                          <i class="fas fa-check fa-sm"></i>
+                      {% else %}
+                          <i class="fas fa-times fa-sm"></i>
+                      {% endif %}</td>
+                      <td>{{ membership.join_date|date }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% if is_group_manager %}
+                  <p>
+                      <a href="{% url "add_member_to_group" group_pk=group.pk %}" class="btn btn-primary"><i class="fas fa-plus fa-sm"></i> Agregar miembro</a>
+                      <a href="{% url "edit_group" pk=group.pk %}" class="btn btn-primary"><i class="fas fa-edit fa-sm"></i> Editar</a>
+                      <a href="{% url "delete_group" pk=group.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt fa-sm"></i> Eliminar</a>
+                  </p>
+                  {% endif %}
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer ">
+        <div class=" py-2 container my-auto">
+          <div class="copyright text-center my-auto">
+            Contáctenos: <a href="{% url 'contactus' %}">NexusMap</a>
+            |
+            <a href="#" onclick="introJs().start()">Visita guiada</a>
+          </div>
+        </div>
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto ">
+            <a class="px-5" href="{% url 'aboutus' %}">Acerca de nosotros</a>
+            <a class="px-5" href="{% url 'team' %}">Equipo</a>
+            <a class="px-5" href="{% url 'news' %}">Noticias</a>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">¿Cerrar sesi&oacute;n?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Confirme si desea cerrar su sesi&oacute;n.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <a class="btn btn-primary" href="/logout">Cerrar sesi&oacute;n</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+  <script src="{% static 'js/base.js' %}"></script>
+</body>
+
+</html>
