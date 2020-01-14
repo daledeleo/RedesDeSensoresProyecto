@@ -99,11 +99,14 @@ var myCurrPosMarker = L.marker([0, 0], {
     icon: greenIcon
 }).addTo(mymap);
 myCurrPosMarker.bindPopup("Usted está aquí");
+
+/*
 var myCurrPosMarkerPrecision = L.circle([0, 0], {
     color: "green",
     fillColor: "green",
     radius: 10
 }).addTo(mymap);
+*/
 
 var myCurrentPos = null;
 
@@ -150,7 +153,7 @@ var toFirstWpRoute = null;
 function computeShortestRoute(destinyId) {
     let destinyWp = markers.find(el => el.pk == '' + destinyId);
     if (myCurrentPos == null) {
-        alert("¡No hay datos de geolocalización!\nNo se puede calcular la ruta más corta.");
+        alert("¡No hay datos de geolocalización!\nNo se puede calcular la ruta más cortrrrrra.");
         return;
     }
 
@@ -262,7 +265,6 @@ function buildRoute(L, endIndex, startIndex) {
         prev_index = L[prev_index][1];
         route.push(prev_index);
     }
-
 
     return route.reverse();
 }

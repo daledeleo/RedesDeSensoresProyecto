@@ -343,13 +343,11 @@ def admin_add_route(request):
         return JsonResponse({"result": "ERROR"})
 
 
+@csrf_exempt
+def ping(request):
+    username = request.user.username if request.user.is_authenticated else "anonymous"
 
-
-def bargraph_stats(request):
-    return JsonResponse(
-        {"events": {"complete": Event.objects.filter(start_datetime__lt=datetime.datetime.now()).count(),
-                    "saved": Event.objects.annotate(num_saved_users=Count("users_who_saved")).filter(num_saved_users__gt=0).count(),
-                    "all": Event.objects.all().count()},
-         "users": {"loggedIn": User.objects.filter(
-             last_login__gte=datetime.datetime.now() - datetime.timedelta(days=2)).count(),
-                   "all": User.objects.all().count()}})
+    client = InfluxDBClient("ec2-18-233-170-234.compute-1.amazonaws.com", 8086, "***", "***", "hits")
+    client.write_points(
+        [{"measurement": "visit", "tags": {"page": request.POST["page"]}, "fields": {"user": username}}])
+    return HttpResponse()

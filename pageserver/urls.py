@@ -56,6 +56,8 @@ urlpatterns = [
     path('publish_my_position', api_views.show_my_position, name="show_my_position"),
     path('add_new_route', api_views.admin_add_route, name="api_admin_add_route"),
 
+    path('ping', api_views.ping, name="ping"),
+
     path('groups/<int:pk>', views.GroupDetailView.as_view(), name="group_detail"),
     path('groups/create', views.GroupCreateView.as_view(), name="group_create"),
     path('groups/<int:pk>/edit', views.GroupUpdateView.as_view(), name="edit_group"),
