@@ -100,13 +100,12 @@ var myCurrPosMarker = L.marker([0, 0], {
 }).addTo(mymap);
 myCurrPosMarker.bindPopup("Usted está aquí");
 
-/*
 var myCurrPosMarkerPrecision = L.circle([0, 0], {
     color: "green",
     fillColor: "green",
     radius: 10
 }).addTo(mymap);
-*/
+
 
 var myCurrentPos = null;
 
