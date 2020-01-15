@@ -91,7 +91,7 @@ def contactus(request):
                                     formulario.cleaned_data.get("lugar_origen"),
                                     formulario.cleaned_data.get("comentarios"))
 
-            mail = EmailMessage(asunto, mensaje, to=['nexusmap2019@gmail.com'])
+            mail = EmailMessage(asunto, mensaje, to=['banio.redes@gmail.com'])
             mail.send()
             mode.save()
             return render(request, "pageserver/contactusAgradecimiento.html")
