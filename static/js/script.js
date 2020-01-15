@@ -57,7 +57,7 @@ $(document).ready(function () {
 
             for (var k in markers) {
                 let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
-                if(markers[k].name=="Baño FIEC"){
+                if(markers[k].name==="Baño FIEC"){
                      $.ajax({
                         url: "https://things.ubidots.com/api/v1.6/devices/ProyectoN102/?token=A1E-jaYZSwLulpp8baZknWsEG8Aa1AXCb6",
                         success: function (data, status) {
