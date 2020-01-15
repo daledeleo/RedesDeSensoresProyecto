@@ -57,8 +57,19 @@ $(document).ready(function () {
 
             for (var k in markers) {
                 let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
-                marker.bindPopup("<p>" + markers[k].name + "</p>" +
-                    "<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
+                if(markers[k].name=="Baño FIEC"){
+                     $.ajax({
+                        url: "https://things.ubidots.com/api/v1.6/devices/ProyectoN102/?token=A1E-jaYZSwLulpp8baZknWsEG8Aa1AXCb6",
+                        success: function (data, status) {
+                            var datoff=data.label;
+                            marker.bindPopup("<p>" + markers[k].name + "</p>"+ datoff);
+                        }
+                    });
+                }else{
+                    marker.bindPopup("<p>" + markers[k].name + "</p>"); //+
+                    //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
+                }
+
                 trueMarkers.push(marker);
 
                 // Only for admins! Show all routes with distances
@@ -93,19 +104,18 @@ $(document).ready(function () {
         m.bindPopup("<p>" + friend_description + " está aquí</p>");
         trueMarkers.push(m);
     }
+
 });
 
 var myCurrPosMarker = L.marker([0, 0], {
     icon: greenIcon
 }).addTo(mymap);
 myCurrPosMarker.bindPopup("Usted está aquí");
-
 var myCurrPosMarkerPrecision = L.circle([0, 0], {
     color: "green",
     fillColor: "green",
     radius: 10
 }).addTo(mymap);
-
 
 var myCurrentPos = null;
 
@@ -152,7 +162,7 @@ var toFirstWpRoute = null;
 function computeShortestRoute(destinyId) {
     let destinyWp = markers.find(el => el.pk == '' + destinyId);
     if (myCurrentPos == null) {
-        alert("¡No hay datos de geolocalización!\nNo se puede calcular la ruta más cortrrrrra.");
+        alert("¡No hay datos de geolocalización!\nNo se puede calcular la ruta más corta.");
         return;
     }
 
@@ -265,6 +275,7 @@ function buildRoute(L, endIndex, startIndex) {
         route.push(prev_index);
     }
 
+
     return route.reverse();
 }
 
@@ -278,3 +289,4 @@ function toLatLong(nodes) {
 
     return toReturn;
 }
+
