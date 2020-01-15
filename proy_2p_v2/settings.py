@@ -132,6 +132,6 @@ django_heroku.settings(locals())
 # Extra places for send froms
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'nexusmap2019@gmail.com'
-EMAIL_HOST_PASSWORD = 'rubotsdmttmc'
+EMAIL_HOST_USER = 'banios.redes@gmail.com'
+EMAIL_HOST_PASSWORD = 'redesdesensores2020'
 EMAIL_PORT = 587
