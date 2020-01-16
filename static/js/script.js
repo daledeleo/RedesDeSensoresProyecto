@@ -56,12 +56,12 @@ $(document).ready(function () {
                 }
                 for (var k in markers) {
                     let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
-                    if (markers[k].name == "Baño FIEC") {
+                    if (markers[k].name === "Baño FIEC") {
                         $.ajax({
                             url: "https://things.ubidots.com/api/v1.6/devices/ProyectoN102/?token=A1E-jaYZSwLulpp8baZknWsEG8Aa1AXCb6",
                             success: function (data, status) {
                                 var datoff = data.label;
-                                marker.bindPopup("<p>" + markers[k].name + "</p>" + datoff);
+                                marker.bindPopup("<p>" + "Baño FIEC" + "</p>" + datoff);
                                 //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
                             }
                         });
