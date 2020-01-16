@@ -48,63 +48,49 @@ var areas;
 
 $(document).ready(function () {
     $.ajax({
-        url: "api/waypoints",
-        success: function (data, status) {
-            markers = data;
-            if (target_wp != null) {
-                computeFirstRoute = true;
-            }
-
-            for (var k in markers) {
-                let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
-                if(markers[k].name==="Baño FIEC"){
-                     $.ajax({
-                        url: "https://things.ubidots.com/api/v1.6/devices/ProyectoN102/?token=A1E-jaYZSwLulpp8baZknWsEG8Aa1AXCb6",
-                        success: function (data, status) {
-                            var datoff=data.label;
-                            marker.bindPopup("<p>" + markers[k].name + "</p>"+ datoff);
-                        }
-                    });
-                }else{
-                    marker.bindPopup("<p>" + markers[k].name + "</p>"); //+
-                    //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
+            url: "api/waypoints",
+            success: function (data, status) {
+                markers = data;
+                if (target_wp != null) {
+                    computeFirstRoute = true;
                 }
-
-                trueMarkers.push(marker);
-
-                // Only for admins! Show all routes with distances
-
+                for (var k in markers) {
+                    let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
+                    if (markers[k].name == "Baño FIEC") {
+                        $.ajax({
+                            url: "https://things.ubidots.com/api/v1.6/devices/ProyectoN102/?token=A1E-jaYZSwLulpp8baZknWsEG8Aa1AXCb6",
+                            success: function (data, status) {
+                                var datoff = data.label;
+                                marker.bindPopup("<p>" + markers[k].name + "</p>" + datoff);
+                                //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
+                            }
+                        });
+                    }else {
+                        marker.bindPopup("<p>" + markers[k].name + "</p>");//+
+                        //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
+                    }
+                    trueMarkers.push(marker);
+                }
+                mymap.fitBounds(new L.featureGroup(trueMarkers).getBounds(), {
+                    padding: L.point(20, 20)
+                });
             }
-            mymap.fitBounds(new L.featureGroup(trueMarkers).getBounds(), {
-                padding: L.point(20, 20)
-            });
-        }
-    });
+        });
 
-    $.ajax({
-        url: "api/areas",
-        success: function (areas, status) {
-            for (let k in areas) {
-                let circle = L.circle([areas[k].latitude, areas[k].longitude], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.2,
-                    radius: 20
-                }).addTo(mymap);
-                circle.bindPopup(areas[k].name);
+        $.ajax({
+            url: "api/areas",
+            success: function (areas, status) {
+                for (let k in areas) {
+                    let circle = L.circle([areas[k].latitude, areas[k].longitude], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.2,
+                        radius: 20
+                    }).addTo(mymap);
+                    circle.bindPopup(areas[k].name);
+                }
             }
-        }
-    });
-
-    // Add friend marker if present
-    if (lat != null) {
-        let m = L.marker([lat, lng], {
-            icon: redIcon
-        }).addTo(mymap);
-        m.bindPopup("<p>" + friend_description + " está aquí</p>");
-        trueMarkers.push(m);
-    }
-
+        });
 });
 
 var myCurrPosMarker = L.marker([0, 0], {
