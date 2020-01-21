@@ -26,15 +26,34 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(mymap);
 
 var greenIcon = new L.Icon({
-    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-pink.png',
+    iconUrl: 'https://assets.mapquestapi.com/icon/v2/marker-03ff00-03ff00.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
+
+var blueIcon = new L.Icon({
+    iconUrl: 'https://assets.mapquestapi.com/icon/v2/marker-0019f7-0015ff.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
 var redIcon = new L.Icon({
     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+var orangeIcon = new L.Icon({
+    iconUrl: 'https://assets.mapquestapi.com/icon/v2/marker-ffa500-ffa500.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -66,39 +85,37 @@ $(document).ready(function () {
                             valores_finales=data1;
                             if(valores_finales.distancia>=9.5 && valores_finales.distancia<=11){
                                 estado_papel="ALETA!! NO HAY PAPEL HIEGIENICO !!";
-                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"purple",
-                                }).addTo(mymap);
                             }else if(valores_finales.distancia < 9.5){
                                 estado_papel="SI HAY PAPEL HIEGIENICO DISPONIBLE";
-                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"purple",
-                                }).addTo(mymap);
                             }
                             if(valores_finales.magnetismo==1 && valores_finales.obstaculo==1){
                                 estado_baño="EL BAÑO ESTA EN MANTENIMIENTO";
                                 marker = L.marker([markers[k].latitude, markers[k].longitude],{
                                     color:"orange",
+                                    icon:orangeIcon,
                                 }).addTo(mymap);
                             }else if(valores_finales.magnetismo==1 && valores_finales.obstaculo==0){
                                 estado_baño="EL BAÑO ESTA CERRADO";
                                 marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"red"
+                                    color:"red",
+                                    icon:redIcon
                                 }).addTo(mymap);
                             }else if(valores_finales.obstaculo==1 && valores_finales.magnetismo==0){
                                 estado_baño="EL BAÑO ESTA MANTENIMIENTO";
                                 marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"orange"
+                                    color:"orange",
+                                    icon:orangeIcon,
                                     }
                                 ).addTo(mymap);
-                            }else{
+                            }else if(valores_finales.obstaculo==0 && valores_finales.magnetismo==0){
                                 estado_baño="EL baño esta disponible";
                                 marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"green"
+                                    color:"green",
+                                    icon:greenIcon
                                     }
                                     ).addTo(mymap);
                             }
-                            marker.bindPopup("<p>" + "Baño FIEC"  + "<br>"+"<br>"+estado_baño+"<br>"+"<br>"+estado_papel+ "</p>");
+                            marker.bindPopup("<p 'style='color:red''>" + "Baño FIEC"  + "<br>"+"<br>"+estado_baño+"<br>"+"<br>"+estado_papel+ "</p>");
                         }
                     });
                     //+
@@ -132,7 +149,7 @@ $(document).ready(function () {
 });
 
 var myCurrPosMarker = L.marker([0, 0], {
-    icon: greenIcon
+    icon: blueIcon
 }).addTo(mymap);
 myCurrPosMarker.bindPopup("Usted está aquí");
 var myCurrPosMarkerPrecision = L.circle([0, 0], {
