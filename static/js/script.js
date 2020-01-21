@@ -26,7 +26,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(mymap);
 
 var greenIcon = new L.Icon({
-    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-pink.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -42,8 +42,12 @@ var redIcon = new L.Icon({
     shadowSize: [41, 41]
 });
 var markers;
+let estado_papel;
+let estado_baño;
+var valores_finales;
 var trueMarkers = [];
 var areas;
+
 
 $(document).ready(function () {
     $.ajax({
@@ -54,16 +58,48 @@ $(document).ready(function () {
                 computeFirstRoute = true;
             }
             for (var k in markers) {
-                let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
+                let marker;
                 if (markers[k].name === "Baño FIEC") {
-                    var valores_sensados;
-
                     $.ajax({
-                        type: "POST",
-                        url: "coneccion_ubidots.py",
-                        data: {param: valores_sensados}
-                    }).done(function (o) {
-                        marker.bindPopup("<p>" + "Baño FIEC" + "</p>"+valores_sensados);
+                        url:"https://trabajo-autonomo-3.firebaseio.com/Registros.json",
+                        success: function(data1,status){
+                            valores_finales=data1;
+                            if(valores_finales.distancia>=9.5 && valores_finales.distancia<=11){
+                                estado_papel="ALETA!! NO HAY PAPEL HIEGIENICO !!";
+                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
+                                    color:"purple",
+                                }).addTo(mymap);
+                            }else if(valores_finales.distancia < 9.5){
+                                estado_papel="SI HAY PAPEL HIEGIENICO DISPONIBLE";
+                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
+                                    color:"purple",
+                                }).addTo(mymap);
+                            }
+                            if(valores_finales.magnetismo==1 && valores_finales.obstaculo==1){
+                                estado_baño="EL BAÑO ESTA EN MANTENIMIENTO";
+                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
+                                    color:"orange",
+                                }).addTo(mymap);
+                            }else if(valores_finales.magnetismo==1 && valores_finales.obstaculo==0){
+                                estado_baño="EL BAÑO ESTA CERRADO";
+                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
+                                    color:"red"
+                                }).addTo(mymap);
+                            }else if(valores_finales.obstaculo==1 && valores_finales.magnetismo==0){
+                                estado_baño="EL BAÑO ESTA MANTENIMIENTO";
+                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
+                                    color:"orange"
+                                    }
+                                ).addTo(mymap);
+                            }else{
+                                estado_baño="EL baño esta disponible";
+                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
+                                    color:"green"
+                                    }
+                                    ).addTo(mymap);
+                            }
+                            marker.bindPopup("<p>" + "Baño FIEC"  + "<br>"+"<br>"+estado_baño+"<br>"+"<br>"+estado_papel+ "</p>");
+                        }
                     });
                     //+
                     //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>")
@@ -100,8 +136,8 @@ var myCurrPosMarker = L.marker([0, 0], {
 }).addTo(mymap);
 myCurrPosMarker.bindPopup("Usted está aquí");
 var myCurrPosMarkerPrecision = L.circle([0, 0], {
-    color: "green",
-    fillColor: "green",
+    color: "blue",
+    fillColor: "blue",
     radius: 10
 }).addTo(mymap);
 
