@@ -41,56 +41,58 @@ var redIcon = new L.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
-
 var markers;
 var trueMarkers = [];
 var areas;
 
 $(document).ready(function () {
     $.ajax({
-            url: "api/waypoints",
-            success: function (data, status) {
-                markers = data;
-                if (target_wp != null) {
-                    computeFirstRoute = true;
-                }
-                for (var k in markers) {
-                    let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
-                    if (markers[k].name === "Baño FIEC") {
-                        $.ajax({
-                            url: "https://things.ubidots.com/api/v1.6/devices/ProyectoN102/?token=A1E-jaYZSwLulpp8baZknWsEG8Aa1AXCb6",
-                            success: function (data, status) {
-                                var datoff = data.label;
-                                marker.bindPopup("<p>" + "Baño FIEC" + "</p>" + datoff);
-                                //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
-                            }
-                        });
-                    }else {
-                        marker.bindPopup("<p>" + markers[k].name + "</p>");//+
-                        //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
-                    }
-                    trueMarkers.push(marker);
-                }
-                mymap.fitBounds(new L.featureGroup(trueMarkers).getBounds(), {
-                    padding: L.point(20, 20)
-                });
+        url: "api/waypoints",
+        success: function (data, status) {
+            markers = data;
+            if (target_wp != null) {
+                computeFirstRoute = true;
             }
-        });
+            for (var k in markers) {
+                let marker = L.marker([markers[k].latitude, markers[k].longitude]).addTo(mymap);
+                if (markers[k].name === "Baño FIEC") {
+                    var valores_sensados;
 
-        $.ajax({
-            url: "api/areas",
-            success: function (areas, status) {
-                for (let k in areas) {
-                    let circle = L.circle([areas[k].latitude, areas[k].longitude], {
-                        color: 'red',
-                        fillColor: '#f03',
-                        fillOpacity: 0.2,
-                        radius: 20
-                    }).addTo(mymap);
-                    circle.bindPopup(areas[k].name);
+                    $.ajax({
+                        type: "POST",
+                        url: "coneccion_ubidots.py",
+                        data: {param: valores_sensados}
+                    }).done(function (o) {
+                        marker.bindPopup("<p>" + "Baño FIEC" + "</p>"+valores_sensados);
+                    });
+                    //+
+                    //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>")
+                } else {
+                    marker.bindPopup("<p>" + markers[k].name + "</p>");//+
+                    //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
                 }
+                trueMarkers.push(marker);
             }
-        });
+            mymap.fitBounds(new L.featureGroup(trueMarkers).getBounds(), {
+                padding: L.point(20, 20)
+            });
+        }
+    });
+
+    $.ajax({
+        url: "api/areas",
+        success: function (areas, status) {
+            for (let k in areas) {
+                let circle = L.circle([areas[k].latitude, areas[k].longitude], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.2,
+                    radius: 20
+                }).addTo(mymap);
+                circle.bindPopup(areas[k].name);
+            }
+        }
+    });
 });
 
 var myCurrPosMarker = L.marker([0, 0], {

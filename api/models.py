@@ -2,7 +2,6 @@ from datetime import timedelta, datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 # Create your models here.
 from django.utils import timezone
 
@@ -171,3 +170,16 @@ class Membership(models.Model):
     group = models.ForeignKey(Group, related_name="memberships", on_delete=models.CASCADE)
     is_group_manager = models.BooleanField(default=False)
     join_date = models.DateTimeField(auto_now_add=True)
+
+class Variables(models.Model):
+    distancia = models.IntegerField(default=None)
+    magnetismo =models.IntegerField(default=None)
+    obstaculos = models.IntegerField(default=None)
+
+    def create(self,dis,mag,obs):
+        self.distancia=dis
+        self.magnetismo=mag
+        self.obstaculo=obs
+
+    def __str__(self):
+        return {"distancia":self.distancia,"magnetismo":self.magnetismo,"obstaculo":self.obstaculos}

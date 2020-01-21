@@ -9,6 +9,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', "pk", 'username', 'email', "courses", "friends", "career", "blocked", "saved_events",
                   "is_staff", "name"]
 
+class VariablesSerializers(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model=Variables
+        fields='__all__'
 
 class RouteSerializer(serializers.HyperlinkedModelSerializer):
     def to_representation(self, value):

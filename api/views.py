@@ -17,7 +17,7 @@ from rest_framework import permissions
 
 from influxdb import InfluxDBClient
 
-
+from .coneccion_ubidots import *
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -42,6 +42,12 @@ class AreaViewSet(viewsets.ModelViewSet):
 class SubjectViewSet(viewsets.ModelViewSet):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+
+class VariablesViewSet(viewsets.ModelViewSet):
+    queryset = Variables.objects.all()
+    serializer_class = VariablesSerializers
     permission_classes = [IsAdminUserOrReadOnly]
 
 
