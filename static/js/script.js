@@ -93,9 +93,36 @@ $(document).ready(function () {
             }
             for (var k in markers) {
                 if (markers[k].name === "Baño FIEC") {
-                    nombre_banio_s=markers[k].name;
+                    nombre_banio_s = markers[k].name;
                     latitud_s = markers[k].latitude;
                     longuitud_s = markers[k].longitude;
+                    let icon_final;
+                    $.ajax({
+                        url: "https://trabajo-autonomo-3.firebaseio.com/Registros.json",
+                        success: function (data1) {
+                            valores_finales = data1;
+                            if (valores_finales.distancia >= 9.5 && valores_finales.distancia <= 11) {
+                                estado_papel = "ALETA!! NO HAY PAPEL HIEGIENICO !!";
+                            } else if (valores_finales.distancia < 9.5) {
+                                estado_papel = "SI HAY PAPEL HIGIENICO DISPONIBLE";
+                            }
+                            if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 || valores_finales.obstaculo == 0)) {
+                                estado_baño = "EL BAÑO ESTA EN MANTENIMIENTO";
+                                icon_final = orangeIcon;
+                            } else if (valores_finales.magnetismo == 1 && valores_finales.obstaculo == 0) {
+                                estado_baño = "EL BAÑO ESTA CERRADO";
+                                icon_final = redIcon;
+                            } else if (valores_finales.obstaculo == 0 && valores_finales.magnetismo == 0) {
+                                estado_baño = "EL baño esta disponible";
+                                icon_final = greenIcon;
+                            }
+                            marker = L.marker([latitud_s, longuitud_s], {
+                                icon: icon_final,
+                            }).addTo(mymap);
+                            marker.bindPopup("<p>" + nombre_banio_s + "<br>" + "<br>" +
+                                estado_baño + "<br>" + "<br>" + estado_papel + "</p>");
+                        }
+                    });
 
                 } else {
                     marker = L.marker([markers[k].latitude, markers[k].longitude], {
@@ -127,34 +154,7 @@ $(document).ready(function () {
     });
 });
 
-let icon_final;
-$.ajax({
-    url: "https://trabajo-autonomo-3.firebaseio.com/Registros.json",
-    success: function (data1) {
-        valores_finales = data1;
-        if (valores_finales.distancia >= 9.5 && valores_finales.distancia <= 11) {
-            estado_papel = "ALETA!! NO HAY PAPEL HIEGIENICO !!";
-        } else if (valores_finales.distancia < 9.5) {
-            estado_papel = "SI HAY PAPEL HIGIENICO DISPONIBLE";
-        }
-        if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 || valores_finales.obstaculo == 0)) {
-            estado_baño = "EL BAÑO ESTA EN MANTENIMIENTO";
-            icon_final = orangeIcon;
-        } else if (valores_finales.magnetismo == 1 && valores_finales.obstaculo == 0) {
-            estado_baño = "EL BAÑO ESTA CERRADO";
-            icon_final = redIcon;
-        } else if (valores_finales.obstaculo == 0 && valores_finales.magnetismo == 0) {
-            estado_baño = "EL baño esta disponible";
-            icon_final = greenIcon;
-        }
-        marker = L.marker([latitud_s,longuitud_s], {
-            icon: icon_final,
-        }).addTo(mymap);
-        marker.bindPopup("<p>" + nombre_banio_s + "<br>" + "<br>" +
-            estado_baño + "<br>" + "<br>" + estado_papel + "</p>");
-    }
 
-});
 var myCurrPosMarker = L.marker([0, 0], {
     icon: blueIcon
 }).addTo(mymap);
