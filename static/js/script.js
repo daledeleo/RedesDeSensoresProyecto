@@ -130,7 +130,6 @@ $(document).ready(function () {
 let icon_final;
 $.ajax({
     url: "https://trabajo-autonomo-3.firebaseio.com/Registros.json",
-    method: "GET",
     success: function (data1) {
         valores_finales = data1;
         if (valores_finales.distancia >= 9.5 && valores_finales.distancia <= 11) {
