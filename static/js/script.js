@@ -101,9 +101,9 @@ $(document).ready(function () {
                         url: "https://trabajo-autonomo-3.firebaseio.com/Registros.json",
                         success: function (data1) {
                             valores_finales = data1;
-                            if (valores_finales.distancia >= 9.5 && valores_finales.distancia <= 11) {
+                            if (valores_finales.distancia >= 8.5 && valores_finales.distancia <= 11) {
                                 estado_papel = "ALETA!! NO HAY PAPEL HIEGIENICO !!";
-                            } else if (valores_finales.distancia < 9.5) {
+                            } else if (valores_finales.distancia < 8.5) {
                                 estado_papel = "SI HAY PAPEL HIGIENICO DISPONIBLE";
                             }
                             if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 )) {

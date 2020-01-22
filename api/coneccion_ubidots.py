@@ -38,7 +38,6 @@ if (valor_dis >= 9.5 and valor_dis <= 11):
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message)
 
-
 """
 #valores_t=requests.get("")
 valores_p=requests.get("https://trabajo-autonomo-3.firebaseio.com/Registros.json")
