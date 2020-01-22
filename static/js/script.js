@@ -73,11 +73,12 @@ $(document).ready(function () {
         url: "api/waypoints",
         success: function (data, status) {
             markers = data;
+            let marker;
             if (target_wp != null) {
                 computeFirstRoute = true;
             }
             for (var k in markers) {
-                let marker;
+
                 if (markers[k].name === "Baño FIEC") {
                     $.ajax({
                         url:"https://trabajo-autonomo-3.firebaseio.com/Registros.json",
@@ -121,6 +122,8 @@ $(document).ready(function () {
                     //+
                     //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>")
                 } else {
+                    marker=L.marker([markers[k].latitude, markers[k].longitude]
+                                    ).addTo(mymap);
                     marker.bindPopup("<p>" + markers[k].name + "</p>");//+
                     //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
                 }
