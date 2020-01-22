@@ -138,7 +138,7 @@ $.ajax({
         } else if (valores_finales.distancia < 9.5) {
             estado_papel = "SI HAY PAPEL HIGIENICO DISPONIBLE";
         }
-        if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 || valores_finales == 0)) {
+        if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 || valores_finales.obstaculo == 0)) {
             estado_baño = "EL BAÑO ESTA EN MANTENIMIENTO";
             icon_final = orangeIcon;
         } else if (valores_finales.magnetismo == 1 && valores_finales.obstaculo == 0) {
