@@ -60,72 +60,48 @@ var orangeIcon = new L.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
+
+var yellowIcon = new L.Icon({
+    iconUrl: 'https://assets.mapquestapi.com/icon/v2/marker-N-ffff00.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
 var markers;
 let estado_papel;
 let estado_baño;
 var valores_finales;
 var trueMarkers = [];
+let latitud_s;
+let longuitud_s;
 var areas;
+let nombre_banio_s;
 
+let marker;
 
 $(document).ready(function () {
+    let ban = 0;
     $.ajax({
         url: "api/waypoints",
         success: function (data, status) {
+
             markers = data;
-            let marker;
             if (target_wp != null) {
                 computeFirstRoute = true;
             }
             for (var k in markers) {
-
                 if (markers[k].name === "Baño FIEC") {
-                    $.ajax({
-                        url:"https://trabajo-autonomo-3.firebaseio.com/Registros.json",
-                        success: function(data1,status){
-                            valores_finales=data1;
-                            if(valores_finales.distancia>=9.5 && valores_finales.distancia<=11){
-                                estado_papel="ALETA!! NO HAY PAPEL HIEGIENICO !!";
-                            }else if(valores_finales.distancia < 9.5){
-                                estado_papel="SI HAY PAPEL HIEGIENICO DISPONIBLE";
-                            }
-                            if(valores_finales.magnetismo==1 && valores_finales.obstaculo==1){
-                                estado_baño="EL BAÑO ESTA EN MANTENIMIENTO";
-                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"orange",
-                                    icon:orangeIcon,
-                                }).addTo(mymap);
-                            }else if(valores_finales.magnetismo==1 && valores_finales.obstaculo==0){
-                                estado_baño="EL BAÑO ESTA CERRADO";
-                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"red",
-                                    icon:redIcon
-                                }).addTo(mymap);
-                            }else if(valores_finales.obstaculo==1 && valores_finales.magnetismo==0){
-                                estado_baño="EL BAÑO ESTA MANTENIMIENTO";
-                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"orange",
-                                    icon:orangeIcon,
-                                    }
-                                ).addTo(mymap);
-                            }else if(valores_finales.obstaculo==0 && valores_finales.magnetismo==0){
-                                estado_baño="EL baño esta disponible";
-                                marker = L.marker([markers[k].latitude, markers[k].longitude],{
-                                    color:"green",
-                                    icon:greenIcon
-                                    }
-                                    ).addTo(mymap);
-                            }
-                            marker.bindPopup("<p 'style='color:red''>" + "Baño FIEC"  + "<br>"+"<br>"+estado_baño+"<br>"+"<br>"+estado_papel+ "</p>");
-                        }
-                    });
-                    //+
-                    //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>")
+                    nombre_banio_s=markers[k].name;
+                    latitud_s = markers[k].latitude;
+                    longuitud_s = markers[k].longitude;
+
                 } else {
-                    marker=L.marker([markers[k].latitude, markers[k].longitude]
-                                    ).addTo(mymap);
-                    marker.bindPopup("<p>" + markers[k].name + "</p>");//+
-                    //"<p><a href='#mapid' onclick='computeShortestRoute(" +k["pk"] + ")'>¿Cómo llegar?</a></p>");
+                    marker = L.marker([markers[k].latitude, markers[k].longitude], {
+                        icon: yellowIcon,
+                    }).addTo(mymap);
+                    marker.bindPopup("<p>" + markers[k].name + "</p>");
                 }
                 trueMarkers.push(marker);
             }
@@ -151,6 +127,35 @@ $(document).ready(function () {
     });
 });
 
+let icon_final;
+$.ajax({
+    url: "https://trabajo-autonomo-3.firebaseio.com/Registros.json",
+    method: "GET",
+    success: function (data1) {
+        valores_finales = data1;
+        if (valores_finales.distancia >= 9.5 && valores_finales.distancia <= 11) {
+            estado_papel = "ALETA!! NO HAY PAPEL HIEGIENICO !!";
+        } else if (valores_finales.distancia < 9.5) {
+            estado_papel = "SI HAY PAPEL HIGIENICO DISPONIBLE";
+        }
+        if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 || valores_finales == 0)) {
+            estado_baño = "EL BAÑO ESTA EN MANTENIMIENTO";
+            icon_final = orangeIcon;
+        } else if (valores_finales.magnetismo == 1 && valores_finales.obstaculo == 0) {
+            estado_baño = "EL BAÑO ESTA CERRADO";
+            icon_final = redIcon;
+        } else if (valores_finales.obstaculo == 0 && valores_finales.magnetismo == 0) {
+            estado_baño = "EL baño esta disponible";
+            icon_final = greenIcon;
+        }
+        marker = L.marker([latitud_s,longuitud_s], {
+            icon: icon_final,
+        }).addTo(mymap);
+        marker.bindPopup("<p>" + nombre_banio_s + "<br>" + "<br>" +
+            estado_baño + "<br>" + "<br>" + estado_papel + "</p>");
+    }
+
+});
 var myCurrPosMarker = L.marker([0, 0], {
     icon: blueIcon
 }).addTo(mymap);
