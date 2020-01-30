@@ -6,7 +6,7 @@ port = 465  # For SSL
 smtp_server = "smtp.gmail.com"
 sender_email = "banios.redes@gmail.com"  # Enter your address
 receiver_email = "banios.redes@gmail.com"  # Enter receiver address
-password = "redesdesensores2020"
+password = "RedesDeSensores2020"
 message = """\
 Subject: Agotamiento de papel higienico en el Banio de FIEC
 

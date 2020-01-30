@@ -106,13 +106,13 @@ $(document).ready(function () {
                             } else if (valores_finales.distancia < 8.5) {
                                 estado_papel = "SI HAY PAPEL HIGIENICO DISPONIBLE";
                             }
-                            if (valores_finales.magnetismo == 1 && (valores_finales.obstaculo == 1 )) {
+                            if (valores_finales.obstaculo === 1 ) {
                                 estado_baño = "EL BAÑO ESTA EN MANTENIMIENTO";
                                 icon_final = orangeIcon;
-                            } else if (valores_finales.magnetismo == 1 && valores_finales.obstaculo == 0) {
+                            } else if (valores_finales.magnetismo === 1 && valores_finales.obstaculo === 0) {
                                 estado_baño = "EL BAÑO ESTA CERRADO";
                                 icon_final = redIcon;
-                            } else if (valores_finales.obstaculo == 0 && valores_finales.magnetismo == 0) {
+                            } else if (valores_finales.obstaculo === 0 && valores_finales.magnetismo === 0) {
                                 estado_baño = "EL baño esta disponible";
                                 icon_final = greenIcon;
                             }
